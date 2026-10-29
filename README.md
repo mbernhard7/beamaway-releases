@@ -29,7 +29,8 @@ It differs from VideoLAN's own VLCKit 4.0 build in these ways:
   the cycle and RTP stream outputs, and the rotate filter).
 - Revision 2 (`-2` in the tag and zip name) also leaves out libgcrypt, SMB (libdsm,
   libsmb2), SFTP (libssh2) and RIST (librist); has VLC's file access treat every file as
-  local instead of asking `fstatfs`; and adds a privacy manifest to the framework.
+  local instead of asking `fstatfs`; adds a privacy manifest to the framework; and fixes a
+  deadlock in the Mac OpenGL view (`-reshape` no longer takes the view's lock).
 
 To rebuild, on a Mac with Xcode and GNU Make 4.4 (`brew install make`):
 
