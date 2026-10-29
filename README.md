@@ -19,12 +19,17 @@ Simulators) and everything needed to rebuild or modify it:
 | `vlc-contrib-sources.tar` | Every third-party library source archive the build fetched |
 | `build-vlckit.sh` | The build script |
 | `VLCKit.json` | Pinned commits, checksums and patch list |
+| `VLCKit-PrivacyInfo.xcprivacy` | The privacy manifest the build puts in each framework (revision 2 on) |
 | `SHA256SUMS` | Checksums of the files above |
 
-It differs from VideoLAN's own VLCKit 4.0 build in two ways: zvbi is turned off (its
-VPS/PDC code is GPL-2 only), and VLC modules that declare a GPL license are left out
-(the file and syslog loggers, the dummy interface, SAP discovery, the cycle and RTP
-stream outputs, and the rotate filter).
+It differs from VideoLAN's own VLCKit 4.0 build in these ways:
+
+- zvbi is turned off (its VPS/PDC code is GPL-2 only), and VLC modules that declare a GPL
+  license are left out (the file and syslog loggers, the dummy interface, SAP discovery,
+  the cycle and RTP stream outputs, and the rotate filter).
+- Revision 2 (`-2` in the tag and zip name) also leaves out libgcrypt, SMB (libdsm,
+  libsmb2), SFTP (libssh2) and RIST (librist); has VLC's file access treat every file as
+  local instead of asking `fstatfs`; and adds a privacy manifest to the framework.
 
 To rebuild, on a Mac with Xcode and GNU Make 4.4 (`brew install make`):
 
@@ -36,7 +41,7 @@ BEAMAWAY_VLC_TARBALLS=$PWD/work/tarballs \
 x/tools/build-vlckit.sh "$PWD/work" package   # one xcframework and zip
 ```
 
-`build-vlckit.sh` expects to sit in a `tools` folder with `VLCKit.json` in a sibling
-`dependencies` folder (`x/tools/build-vlckit.sh`, `x/dependencies/VLCKit.json`), as in
-Beamaway's source. To relink Beamaway with a modified VLCKit, replace `VLCKit.framework` in the
+`build-vlckit.sh` expects to sit in a `tools` folder with `VLCKit.json` (and, from
+revision 2, `VLCKit-PrivacyInfo.xcprivacy`) in a sibling `dependencies` folder
+(`x/tools/build-vlckit.sh`, `x/dependencies/VLCKit.json`), as in Beamaway's source. To relink Beamaway with a modified VLCKit, replace `VLCKit.framework` in the
 app's `Frameworks` folder (it is a dynamic library) and re-sign the app.
